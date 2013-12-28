@@ -3,6 +3,25 @@
 var express = require('express');
 var fs      = require('fs');
 
+//mongoose
+var mongoose = require( 'mongoose' ); //MongoDB integration
+
+// mongoose.connect('mongodb://localhost/testbooks');
+mongoose.connect('mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/englishbooks');
+
+var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function callback () {
+      console.log('ok!')
+    });
+
+var Schema = mongoose.Schema;    
+
+var English = mongoose.model('English', 
+    new Schema({ 
+        title: String, editions: String, isbn: Number, author: String }), 
+        'english');
+
 
 /**
  *  Define the sample application.
@@ -113,12 +132,27 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
+        self.app.configure(function(){
+             self.app.use(express.bodyParser());
+             self.app.use(express.methodOverride());
+             self.app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+            ['public/css', 'public/img', 'public/js', 'public/plugin', 'public/lib'].forEach(function (dir){
+                self.app.use('/'+dir, express.static(__dirname+'/'+dir));
+            });
+        });
+
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
         }
+        self.app.all('/books', function(req, res) {
+        return English.find({}, function(err, data) { 
+        console.log(err, data, data.length);
+        return res.send(data);
+     }); 
+});
     };
 
 
