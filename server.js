@@ -148,11 +148,12 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
         self.app.all('/books', function(req, res) {
-            res.send('books ok!');
-        // return English.find({}, function(err, data) { 
-        // console.log(err, data, data.length);
-        // return res.send(data);
-     }); 
+            
+        English.findOne({}, function(err, data) { 
+        console.log(err, data, data.length);
+        res.send(data);
+     });
+ }); 
     };
 
 
