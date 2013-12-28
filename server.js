@@ -153,7 +153,6 @@ var SampleApp = function() {
         // console.log(err, data, data.length);
         // return res.send(data);
      }); 
-});
     };
 
 
