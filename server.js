@@ -7,7 +7,7 @@ var fs      = require('fs');
 var mongoose = require( 'mongoose' ); //MongoDB integration
 
 // mongoose.connect('mongodb://localhost/testbooks');
-mongoose.connect('mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/englishbooks');
+mongoose.connect('mongodb://process.env.$OPENSHIFT_MONGODB_DB_HOST:process.env.$OPENSHIFT_MONGODB_DB_PORT/englishbooks');
 
 var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
