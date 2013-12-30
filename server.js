@@ -149,9 +149,9 @@ var SampleApp = function() {
         }
         self.app.all('/books', function(req, res) {
             
-        English.findOne({}, function(err, data) { 
-        console.log(err, data, data.length);
-        res.send(data);
+        // English.findOne({}, function(err, data) { 
+        // console.log(err, data, data.length);
+        res.send('books ok!');
      });
  }); 
     };
