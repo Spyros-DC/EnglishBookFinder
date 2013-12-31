@@ -146,12 +146,13 @@ var SampleApp = function() {
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
-        }
+        };
         self.app.all('/books', function(req, res) {
             
-        // English.findOne({}, function(err, data) { 
-        // console.log(err, data, data.length);
-        res.send('books ok!');
+        English.find({}, function(err, data) { 
+        console.log(err, data, data.length);
+        res.send(data);
+     });
     
  }); 
     };
