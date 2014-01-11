@@ -6,6 +6,8 @@ var fs      = require('fs');
 //mongoose
 var mongoose = require( 'mongoose' ); //MongoDB integration
 
+// mongoose.connect('localhost/testbooks');
+
 mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL + 'englishbooks');
 
 var db = mongoose.connection;
@@ -18,7 +20,7 @@ var Schema = mongoose.Schema;
 
 var English = mongoose.model('English', 
     new Schema({ 
-        title: String, editions: String, isbn: Number, author: String }), 
+        title: String, editions: String, isbn: Number, author: String, Εκδόσεις: String}), 
         'english');
 
 
