@@ -97,7 +97,7 @@ var FormView = Backbone.View.extend ({
       type: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',
-      url: 'http://englishbooks-thalassa.rhcloud/results',
+      url: 'http://englishbooks-thalassa.rhcloud.com/results',
       success: function() {
 
         booksCollection.fetch({reset:true}); 
