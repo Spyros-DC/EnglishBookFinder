@@ -3,7 +3,7 @@ var BookModel = Backbone.Model.extend({
 
 defaults: {
   title:'two',
-  'τιμή': 1,
+  'τιμή_λιανική': 1,
   editions : 'Sxedia',
   isbn : '123',
   author : 'John'
@@ -18,7 +18,11 @@ var BooksCollection = Backbone.Collection.extend({
 
 var BooksView = Backbone.View.extend({
 
-  el: "#books",
+  tagName: 'table',
+
+  attributes: {
+    'border': '1'
+  },
 
   initialize: function() {
     this.render();
@@ -27,6 +31,7 @@ var BooksView = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
+    this.$el.append("<tr><th>Τίτλος</th><th>Τιμή</th></tr>");
     this.collection.each(function(book){
       // για κάθε βιβλίο και μια view
       var bookView = new BookView({ model : book});
@@ -40,7 +45,7 @@ var BooksView = Backbone.View.extend({
 
 var BookView = Backbone.View.extend({
 
- tagName: 'li',
+ tagName: 'tr',
 
  template: _.template( $('#bookTemplate').html() ),
 
@@ -92,7 +97,7 @@ var FormView = Backbone.View.extend ({
       type: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',
-      url: 'http://localhost:3000/results',
+      url: 'http://englishbooks-thalassa.rhcloud/results',
       success: function() {
 
         booksCollection.fetch({reset:true}); 
@@ -104,3 +109,4 @@ var FormView = Backbone.View.extend ({
 
 new FormView;
 var booksView = new BooksView({ collection: booksCollection });
+$('#books').append(booksView.el);

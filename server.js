@@ -29,6 +29,15 @@ var SampleApp = function() {
 
     //  Scope.
     var self = this;
+    self.app = express();
+    self.app.configure(function(){
+         self.app.use(express.bodyParser());
+         self.app.use(express.methodOverride());
+         self.app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+        ['public/css', 'public/img', 'public/js', 'public/plugin', 'public/lib'].forEach(function (dir){
+            self.app.use('/'+dir, express.static(__dirname+'/'+dir));
+        });
+    });
 
 
     /*  ================================================================  */
@@ -122,6 +131,36 @@ var SampleApp = function() {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
         };
+        self.routes['books'] = function(req, res) {
+            English.find({}, function(err, data) { 
+            console.log(err, data, data.length);
+            res.send(data);
+         });
+        };
+        var message = 'first book';
+        self.routes['allResults'] = function(req, res, next){
+
+            if (req.method == 'POST') {
+              if( !req.body.message  || req.body.message.length <= 3 ) {
+                message = 'second book';
+              }else {
+                message = req.body.message;
+              }
+              console.log(message);
+              res.send('post ok!');
+            }else{
+              console.log(message + '!');
+              next();
+            };
+        };
+
+        self.routes['getResults'] = function(req, res){
+
+            return English.find({title: new RegExp( message,'i')}, function(err, data) { 
+              console.log(err, data, data.length, message);
+              res.send( JSON.stringify(data));
+          });
+        };
     };
 
 
@@ -130,30 +169,48 @@ var SampleApp = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
+
         self.createRoutes();
-        self.app = express();
-        self.app.configure(function(){
-             self.app.use(express.bodyParser());
-             self.app.use(express.methodOverride());
-             self.app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-            ['public/css', 'public/img', 'public/js', 'public/plugin', 'public/lib'].forEach(function (dir){
-                self.app.use('/'+dir, express.static(__dirname+'/'+dir));
-            });
-        });
+        
 
 
         //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        };
-        self.app.all('/books', function(req, res) {
+        self.app.get('/', self.routes['/']);
+        self.app.get('/books', self.routes['books']);
+        self.app.all('/results', self.routes['allResults']);
+        self.app.get('/results', self.routes['getResults']);
+    //     for (var r in self.routes) {
+    //         self.app.get(r, self.routes[r]);
+    //     };
+    //     self.app.all('/books', function(req, res) {
             
-        English.find({}, function(err, data) { 
-        console.log(err, data, data.length);
-        res.send(data);
-     });
-    
- }); 
+    //     English.find({}, function(err, data) { 
+    //     console.log(err, data, data.length);
+    //     res.send(data);
+    //  });
+    // });
+    // var message = 'first book';
+
+    //     self.app.all('/results', function(req, res, next){
+
+    //         if (req.method == 'POST') {
+    //           message = req.body.message;
+    //           console.log(message);
+    //           res.send('post ok!');
+    //         }else{
+    //           console.log(message + '!');
+    //           next();
+    //         }
+    //       });
+
+    //     self.app.get('/results', function(req, res){
+
+    //         return English.find({title: new RegExp('^'+ message)}, function(err, data) { 
+    //           console.log(err, data, data.length, message);
+    //           res.send( JSON.stringify(data));
+    //       });
+    // });
+
     };
 
 
