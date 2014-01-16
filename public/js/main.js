@@ -51,7 +51,7 @@
 
     render: function() {
       this.$el.empty();
-      this.$el.append("<tr><th>Τίτλος</th><th>Τιμή</th><th>Εκδόσεις</th></tr>");
+      this.$el.append("<tr><th>Τίτλος</th><th>Τιμή σε ευρώ</th><th>Εκδόσεις</th></tr>");
       this.collection.each(function(book){
         // για κάθε βιβλίο και μια view
         var bookView = new App.Views.Book({ model : book});

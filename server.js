@@ -181,38 +181,7 @@ var SampleApp = function() {
         self.app.get('/books', self.routes['books']);
         self.app.all('/results', self.routes['allResults']);
         self.app.get('/results', self.routes['getResults']);
-    //     for (var r in self.routes) {
-    //         self.app.get(r, self.routes[r]);
-    //     };
-    //     self.app.all('/books', function(req, res) {
-            
-    //     English.find({}, function(err, data) { 
-    //     console.log(err, data, data.length);
-    //     res.send(data);
-    //  });
-    // });
-    // var message = 'first book';
-
-    //     self.app.all('/results', function(req, res, next){
-
-    //         if (req.method == 'POST') {
-    //           message = req.body.message;
-    //           console.log(message);
-    //           res.send('post ok!');
-    //         }else{
-    //           console.log(message + '!');
-    //           next();
-    //         }
-    //       });
-
-    //     self.app.get('/results', function(req, res){
-
-    //         return English.find({title: new RegExp('^'+ message)}, function(err, data) { 
-    //           console.log(err, data, data.length, message);
-    //           res.send( JSON.stringify(data));
-    //       });
-    // });
-
+ 
     };
 
 
