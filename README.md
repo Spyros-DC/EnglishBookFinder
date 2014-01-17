@@ -1,3 +1,2 @@
-The OpenShift `nodejs` cartridge documentation can be found at:
-
-https://github.com/openshift/origin-server/tree/master/cartridges/openshift-origin-cartridge-nodejs/README.md
+Sample application just to play and learn Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
+Hosted at http://englishbooks-thalassa.rhcloud.com/
