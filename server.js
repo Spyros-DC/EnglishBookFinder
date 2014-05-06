@@ -2,26 +2,8 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-
-//mongoose
-var mongoose = require( 'mongoose' ); //MongoDB integration
-
-// mongoose.connect('localhost/testbooks');
-
-mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL + 'englishbooks');
-
-var db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'connection error:'));
-    db.once('open', function callback () {
-      console.log('ok!')
-    });
-
-var Schema = mongoose.Schema;    
-
-var English = mongoose.model('English', 
-    new Schema({ 
-        title: String, editions: String, isbn: Number, author: String, Εκδόσεις: String}), 
-        'english');
+var mongo   = require('./func/mongoose.js');
+var func    = require('./func/functions.js');
 
 
 /**
@@ -36,7 +18,7 @@ var SampleApp = function() {
          self.app.use(express.bodyParser());
          self.app.use(express.methodOverride());
          self.app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-        ['public/css', 'public/img', 'public/js', 'public/plugin', 'public/lib'].forEach(function (dir){
+        ['public/css', 'public/img', 'public/js', 'public/plugin', 'public/lib', 'public/fonts'].forEach(function (dir){
             self.app.use('/'+dir, express.static(__dirname+'/'+dir));
         });
     });
@@ -50,7 +32,7 @@ var SampleApp = function() {
      *  Set up server IP address and port # using env variables/defaults.
      */
     self.setupVariables = function() {
-        //  Set the environment variables we need.
+       
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
@@ -59,7 +41,7 @@ var SampleApp = function() {
             //  allows us to run/test the app locally.
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
             self.ipaddress = "127.0.0.1";
-        };
+        }
     };
 
 
@@ -117,53 +99,46 @@ var SampleApp = function() {
     /*  ================================================================  */
     /*  App server functions (main app logic here).                       */
     /*  ================================================================  */
-
-    /**
+       /**
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
         self.routes = { };
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
         };
-        self.routes['books'] = function(req, res) {
-            English.find({}, function(err, data) { 
-            console.log(err, data, data.length);
-            res.send(data);
-         });
-        };
-        var message = 'first book';
-        self.routes['allResults'] = function(req, res, next){
+        var message = '';
+        self.routes.allResults = function(req, res, next){
 
             if (req.method == 'POST') {
-              if( !req.body.message  || req.body.message.length <= 3 ) {
-                message = 'second book';
-              }else {
-                message = req.body.message;
-              }
-              console.log(message);
+            //validate message 
+               if(  req.body.message.length > 3 ) {
+                  message = req.body.message;
+               }else {
+                  message = '';
+               }
               res.send('post ok!');
             }else{
-              console.log(message + '!');
               next();
-            };
+            }
         };
 
-        self.routes['getResults'] = function(req, res){
+        self.routes.getResults = function(req, res){
+        
+           if(message === ''){
+              res.send(200);
+           }else{
+              //validate message
+              var regexMessage = func.processMessage(message);
 
-            return English.find({title: new RegExp( message,'i')}, function(err, data) { 
-              console.log(err, data, data.length, message);
-              res.send( JSON.stringify(data));
-          });
+              return mongo.English.find({'Τίτλος': regexMessage }, function(err, data) { 
+                    res.send( JSON.stringify(data));
+                    });
+           }
         };
-    };
+     };
 
 
     /**
@@ -178,9 +153,8 @@ var SampleApp = function() {
 
         //  Add handlers for the app (from the routes).
         self.app.get('/', self.routes['/']);
-        self.app.get('/books', self.routes['books']);
-        self.app.all('/results', self.routes['allResults']);
-        self.app.get('/results', self.routes['getResults']);
+        self.app.all('/results', self.routes.allResults);
+        self.app.get('/results', self.routes.getResults);
  
     };
 
@@ -219,4 +193,5 @@ var SampleApp = function() {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
+
 

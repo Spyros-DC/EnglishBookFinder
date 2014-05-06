@@ -1,126 +1,111 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="public/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-    <style type="text/css">
-    	* {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-color: #7195A3;
-}
-
-#container {
-    width: 500px;
-    margin: 0 auto;
-}
-
-#content {
-    background-color: #fff;
-    margin-top: 40px;
-    padding: 20px;
-    border: 1px solid #082e4c;
-    border-radius: 20px;
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    color: #666;
-}
-
-#content h1 {
-    color: #7195A3;
-    font-size: 4em;
-    text-align: center;
-    margin-bottom: 40px;
-    border-bottom: 1px solid #7195A3;
-}
-
-#content form {
-    font-size: 1.5em;
-    margin-bottom: 25px;
-    color: #000;
-}
-
-#content form input[type=text] {
-    width: 270px;
-    padding: 8px;
-    font-size: .7em;
-}
-
-#content form input[type=submit] {
-    border: 1px solid #082e4c;
-    background-color: #7195A3;
-    color: #fff;
-    font-size: .8em;
-    width: 80px;
-    height: 40px;
-}
-
-#content ul {
-    font-size: 1.2em;
-    margin-left: 60px;
-}
-
-#form {
-    padding-bottom: 2em;
-}
-.hcolor {
-    color: rgb(51,153,204);
-}
-.center {
-    text-align: center;
-}
-    </style>
-
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   <title>English Books Finder</title>
+   <meta name="description" content="Book finder application">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="public/css/bootstrap.css">
+   <link rel="stylesheet" href="public/css/main.css">
+   <script src="public/js/libs/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+   <script data-main="public/js/main" src="public/js/libs/require.js"></script>
 </head>
 <body>
-    <div id='container'>
-    <div id='content'>
-	<h1>English books finder</h1>
-	<h3>Μία εφαρμογή φτιαγμένη με Backbone.js, Node.js, Express, and MongoDB για ανέυρεση ξενόγλωσσων εκπαιδευτικών βιβλίων. </h3>
-	<p>Συμπληρώστε τον τίτλο του βιβλίου στο παρακάτω πεδίο.</p>
-	<div id="form">
-		<form id  ="superform">
-			<input id="input" type="text" name="text" value="first book">
-			<p></p>
-			</form>
-	</div>
-	<div id="books">
-		
-	</div> 
+   <div class="container">
+      <div class="row">
+         <div class="col-xs-6 pull-right">
+            <h2 class="text-center">My basket</h2>
+            <table class="table table-striped ">
+               <thead>
+                  <tr>
+                     <th>Τίτλος</th>
+                     <th>Τιμή</th>
+                     <th></th>
+                  </tr>
+               </thead>
+               <tbody id="books2">
+               </tbody>
+            </table>
+         </div>
+         <div class="col-xs-4 pull-left">
+            <div class="page-header text-center ">
+               <h3><small>Μία εφαρμογή φτιαγμένη με Backbone.js, Node.js, Express, Bootstrap και MongoDB για ανέυρεση ξενόγλωσσων εκπαιδευτικών βιβλίων</small></h3>
+            </div>
+         </div>
+      </div>
+      <div class="jumbotron">
+      <h1 class="text-center">English books finder<h1>
+      <p class="text-center"><small>Γράψτε τον τίτλο του βιβλίου στο παρακάτω πεδίο</small></p>
+      <form id  ="superform">
+      <input id="input" class="form-control" type="text" name="text" value="">
+      </form>
+      </div><!--end jumbotroon-->
+      <table class="table table-striped " id="main-table">
+         <thead>
+            <tr>
+               <th>ISBN</th>
+               <th>Τίτλος</th>
+               <th>Εκδόσεις</th>
+               <th><span class="glyphicon glyphicon-euro"></span></th>
+               <th></th>
+            </tr>
+         </thead>
+      </table>
+      <footer class="pull-right air">
+         <p><em>App created by  </em><a href="http://sitedesigns.gr" target="_blank"><img src="public/img/logoSmall.gif" ></a></p>
+      </footer>
+   </div><!--end container-->
 
-	<a href="#books">
-		<p>Οι τιμές των βιβλίων είναι υποθετικές.</p>
-	</a>
+   <script id="bookTemplate" type="text/template">
 
-    </div>
-    </div>
+      <td><%= ISBN%></td> 
+      <td><a href="#" class="bookModal"><%= Τίτλος %></a></td>  
+      <td><%= Εκδόσεις %></td> 
+      <td><%= Τιμή_λιανικής %></td> 
+      <td><button class="btn add"><span class="glyphicon glyphicon-shopping-cart"></span></button></td>
+ 
+    </script>
 
+   <script id="basketTemplate" type="text/template">
 
-<script id="bookTemplate" type="text/template">
-	
-	<td><%= title %></td>  <td class="center"><%= τιμή_λιανική %></td> <td><%= Εκδόσεις %></td>
-</script>
+      <td><%= Τίτλος%></a></td>  
+      <td><%= Τιμή_λιανικής %></td>
+      <td><button class="btn"><span class="glyphicon glyphicon-remove"></span></button></td>
+ 
+    </script>
 
-
-<script src="public/js/underscore.js"></script>
-<script src="public/js/jquery-1.10.2.js"></script>
-<script src="public/js/backbone.js"></script>
-<script src="public/js/main.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="public/js/bootstrap.min.js"></script>
+   <script id="selectTemplate" type="text/template">
+      
+         <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+               <h4 class="modal-title"><%=  Τίτλος%></h4>
+            </div>
+            <div class="modal-body">
+               <ul class="list-group">
+               <li class="list-group-item">ISBN: <%= ISBN%></li> 
+               <li class="list-group-item">Τίτλος: <%= Τίτλος%></li>  
+               <li class="list-group-item">Εκδόσεις: <%= Εκδόσεις %></li> 
+               <li class="list-group-item">Τιμή: <%= Τιμή_λιανικής %></li>
+               </ul> 
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">Επιστροφή στην αναζήτηση</button>
+               <button type="button" class="btn btn-primary add" data-dismiss="modal" >Προσθήκη στο καλάθι</button>
+            </div>
+            </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+ 
+    </script>
+   
+   <!--[if lt IE 7]>
+   <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+   <![endif]-->
 
 </body>
 </html>
