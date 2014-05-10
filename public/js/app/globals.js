@@ -18,16 +18,19 @@ define([
             [
                {
                Εκδόσεις : 'Sxedia',
+               Τίτλος:'My first english book',
                ISBN : '123',
                _id: 'one'
                },
                {
                Εκδόσεις : 'Sxedia',
+               Τίτλος:'My very first english book',
                ISBN : '1234',
                _id: 'two'
                },
                {
                Εκδόσεις : 'Sxedia',
+               Τίτλος:'My very very first english book',
                ISBN : '123456',
                _id: 'three'
                }

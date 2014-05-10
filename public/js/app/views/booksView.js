@@ -44,7 +44,7 @@ define([
                   type: 'POST',
                   data: JSON.stringify(data),
                   contentType: 'application/json',
-                  url: 'http://localhost:8080/results',
+                  url: 'http://bookfinder-thalassa.rhcloud.com//results',
                   success: function() {
                      that.collection.fetch({reset:true});
                   }

@@ -3,8 +3,9 @@ define([
        'app/views/booksView',
        'app/globals',
        'app/views/basketView',
-       'validateFunctions'
-       ], function (anyChange, BooksView, Globals, BasketView, validateFunctions) {
+       'validateFunctions',
+       'underscore'
+       ], function (anyChange, BooksView, Globals, BasketView, validateFunctions, _) {
 
          'use strict';
          
@@ -21,7 +22,8 @@ define([
                that.listenTo(Globals.basketCollection, 'add', that.addOne);
                that.listenTo(Globals.basketCollection, 'reset', that.addAll);
                Globals.basketCollection.fetch();
-               that.input.anyChange(that.newCollection.bind(that));
+               var bindCollection = _.bind(that.newCollection, that);
+               that.input.anyChange(bindCollection);
             },
 
             views: [],
